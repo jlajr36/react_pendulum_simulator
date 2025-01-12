@@ -1,0 +1,22 @@
+/* .App styles */
+.App {
+  text-align: center;  /* Centers the text horizontally inside the .App container */
+}
+
+/* .App-header styles */
+.App-header {
+  background-color: #4e5b6e;  /* Set a muted blue-gray color for the background */
+  min-height: 100vh;  /* Ensure the header takes up at least the full height of the viewport */
+  display: flex;  /* Use flexbox to position children elements */
+  flex-direction: column;  /* Stack the children (heading and canvas) vertically */
+  align-items: center;  /* Horizontally center the children */
+  justify-content: center;  /* Vertically center the children */
+  font-size: calc(10px + 2vmin);  /* Make the font size responsive based on the viewport's minimum dimension */
+  color: white;  /* Set the text color to white for contrast against the background */
+}
+
+/* Canvas styles */
+canvas {
+  border: 1px solid black;  /* Add a black border around the canvas for definition */
+  margin-top: 20px;  /* Add some space above the canvas to separate it from the header */
+}
