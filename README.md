@@ -1,2 +1,2 @@
-# react_pendulum_simulator
-A Single Pendulum Simulator in React JS.
+# React Pendulum Simulator
+A Single Simple Pendulum Simulator in React JS.
