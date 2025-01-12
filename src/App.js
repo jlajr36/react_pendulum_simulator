@@ -7,6 +7,7 @@ function App() {
   // Pendulum parameters
   const length = 350;  // Length of the pendulum arm (in pixels)
   const gravity = 0.4;  // Gravity constant (adjust for visual effect)
+  const damping = 0.995;  // Damping coefficient (reduce this value to increase damping)
 
   // Initial conditions for the pendulum
   let angle = Math.PI / 2;  // Starting angle (90 degrees)
@@ -22,6 +23,10 @@ function App() {
     // Formula: angular acceleration = (-gravity / length) * sin(angle)
     angleAcceleration = (-gravity / length) * Math.sin(angle);
     angleVelocity += angleAcceleration;  // Update angular velocity based on acceleration
+
+    // Apply damping to the angular velocity to simulate energy loss
+    angleVelocity *= damping;  // Reduce the angular velocity by the damping factor
+
     angle += angleVelocity;  // Update the angle based on velocity
 
     // Clear the canvas before drawing the next frame
