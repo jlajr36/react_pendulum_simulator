@@ -1,0 +1,98 @@
+import React, { useRef, useEffect, useState } from 'react';
+import './App.css';
+
+function App() {
+  const canvasRef = useRef(null); // Reference to the canvas element
+  const circlePosition = useRef({ x: 250, y: 250 });  // Using ref to store circle position
+  const radius = 30;
+
+  const [circleColor, setCircleColor] = useState('blue');  // State for circle color
+  const [circleSpeed, setCircleSpeed] = useState({ dx: 0.5, dy: 0.5 });  // Speed of circle movement
+
+  // Function to run the animation loop
+  const animate = () => {
+    const canvas = canvasRef.current; // Get canvas reference
+    const ctx = canvas.getContext('2d'); // Get 2D drawing context
+
+    // Clear the canvas before drawing the next frame
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Move the circle by its speed
+    circlePosition.current.x += circleSpeed.dx;
+    circlePosition.current.y += circleSpeed.dy;
+
+    // Bounce the circle off the canvas boundaries
+    if (circlePosition.current.x + radius > canvas.width || circlePosition.current.x - radius < 0) {
+      circleSpeed.dx = -circleSpeed.dx;  // Reverse horizontal direction
+    }
+    if (circlePosition.current.y + radius > canvas.height || circlePosition.current.y - radius < 0) {
+      circleSpeed.dy = -circleSpeed.dy;  // Reverse vertical direction
+    }
+
+    // Draw the circle with the current color
+    ctx.beginPath();
+    ctx.arc(circlePosition.current.x, circlePosition.current.y, radius, 0, 2 * Math.PI, false);
+
+    // Set the dynamic circle color
+    ctx.fillStyle = circleColor;
+    ctx.fill();
+    ctx.stroke();
+
+    // Request the next animation frame to create a smooth loop
+    requestAnimationFrame(animate);
+  };
+
+  // Mouse click handler to detect if the circle is clicked
+  const handleMouseClick = (e) => {
+    const canvas = canvasRef.current;
+    const canvasRect = canvas.getBoundingClientRect(); // Get canvas position and dimensions
+
+    // Calculate mouse position relative to the canvas
+    const mouseX = e.clientX - canvasRect.left;
+    const mouseY = e.clientY - canvasRect.top;
+
+    // Check if the mouse click is within the bounds of the circle
+    const isInsideCircle = Math.sqrt(
+      (mouseX - circlePosition.current.x) ** 2 + (mouseY - circlePosition.current.y) ** 2
+    ) < radius;
+
+    // If inside the circle, change its color to red
+    if (isInsideCircle) {
+      setCircleColor('red');  // Update the color to red
+    }
+  };
+
+  // Start the animation when the component is mounted
+  useEffect(() => {
+    animate();  // Start the animation loop
+
+    // Add event listener for mouse click on the canvas
+    const canvas = canvasRef.current;
+    canvas.addEventListener('click', handleMouseClick);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      canvas.removeEventListener('click', handleMouseClick);
+    };
+  }, []); // Empty dependency array ensures this runs once when the component mounts
+
+  useEffect(() => {
+    // Re-start the animation when the circle color changes
+    animate();
+  }, [circleColor]);  // Trigger re-animation when color changes
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Circle Animation</h1>
+        <canvas
+          ref={canvasRef}  // Attach canvasRef to this canvas
+          width={800}       // Set canvas width to 800px
+          height={600}      // Set canvas height to 600px
+        />
+      </header>
+    </div>
+  );
+}
+
+export default App;
