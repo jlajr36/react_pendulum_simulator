@@ -11,7 +11,7 @@ function App() {
   const radius = 10; // radius of bob
 
   // Initial conditions for the pendulum
-  let angle = Math.PI / 2;  // Starting angle (90 degrees)
+  let angle = 0;  // Starting angle (0 degrees)
   let angleVelocity = 0;  // Initial angular velocity (starts at 0)
   let angleAcceleration = 0;  // Initial angular acceleration (starts at 0)
   let pendulumX = 0; // Pendulum x position
