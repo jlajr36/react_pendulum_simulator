@@ -8,15 +8,15 @@ function App() {
   const length = 350;  // Length of the pendulum arm (in pixels)
   const gravity = 0.4;  // Gravity constant (adjust for visual effect)
   const damping = 0.995;  // Damping coefficient (reduce this value to increase damping)
-  var pendulumX = 0; // penulum x position
-  var pendulumY = 0; // penulum y position
   const radius = 10; // radius of bob
-  const [circleColor, setColorCircle] = useState('red');
 
   // Initial conditions for the pendulum
   let angle = Math.PI / 2;  // Starting angle (90 degrees)
   let angleVelocity = 0;  // Initial angular velocity (starts at 0)
   let angleAcceleration = 0;  // Initial angular acceleration (starts at 0)
+  let pendulumX = 0; // Pendulum x position
+  let pendulumY = 0; // Pendulum y position
+  let isDragging = false; // Whether the pendulum is being dragged
 
   // Function to run the animation loop
   const animate = () => {
@@ -58,10 +58,10 @@ function App() {
     ctx.lineWidth = 2;  // Set the line width to 2px
     ctx.stroke();  // Render the line
 
-    // Draw the bob (pendulum ball) as a red circle
+    // Draw the bob (pendulum ball) as a red circle (or dynamic color)
     ctx.beginPath();
     ctx.arc(pendulumX, pendulumY, radius, 0, 2 * Math.PI);  // Draw circle at pendulum's current position
-    ctx.fillStyle = circleColor;  // Set the fill color
+    ctx.fillStyle = 'red';  // Set the fill color
     ctx.fill();  // Fill the circle with the color
   };
 
@@ -76,27 +76,45 @@ function App() {
     ) < radius;
 
     if (isInsideCircle) {
-      console.log("Clicked in the circle.");
+      isDragging = true;
     }
   };
 
-  // Handle mouse down event
-  const handleMouseUp = (event) => {
-    console.log("Mouse Up Event");
+  // Handle mouse move event
+  const handleMouseMove = (event) => {
+    if (isDragging) {
+      const mouseX = event.offsetX;
+      const mouseY = event.offsetY;
+
+      const originX = canvasRef.current.width / 2;
+      const originY = 100;
+
+      // Calculate the new angle based on the mouse position
+      const newAngle = Math.atan2(mouseX - originX, mouseY - originY);
+
+      angle = newAngle; // Set the pendulum angle to the new angle
+    }
+  };
+
+  // Handle mouse up event
+  const handleMouseUp = () => {
+    isDragging = false; // Stop dragging the pendulum
   };
 
   // Start the animation when the component is mounted
   useEffect(() => {
     animate();  // Start the animation loop
 
-    // Add event listener for mouse down
+    // Add event listeners for mouse interactions
     const canvas = canvasRef.current;
     canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('mouseup', handleMouseUp);
 
     // Cleanup event listeners when component unmounts
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseup', handleMouseUp);
     };
   }, []); // Empty dependency array ensures this runs once when the component mounts
