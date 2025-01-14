@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import './App.css';
 
 function App() {
@@ -36,6 +36,14 @@ function App() {
     // Clear the canvas before drawing the next frame
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawPendulum(ctx);  // Call the function to draw the pendulum
+
+    // Convert the angle to degrees
+    const angleInDegrees = angle * (180 / Math.PI);
+
+    // Display the current angle in degrees on the canvas
+    ctx.font = '20px Courier New';  // Font style for the angle display
+    ctx.fillStyle = 'white';        // Text color
+    ctx.fillText(`Current Angle: ${angleInDegrees.toFixed(2)}°`, 20, 40);  // Position the text
 
     // Request the next animation frame to create a smooth loop
     requestAnimationFrame(animate); 
