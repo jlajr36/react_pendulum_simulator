@@ -79,6 +79,11 @@ function App() {
     }
   };
 
+  // Handle mouse down event
+  const handleMouseUp = (event) => {
+    console.log("Mouse Up Event");
+  };
+
   // Start the animation when the component is mounted
   useEffect(() => {
     animate();  // Start the animation loop
@@ -86,10 +91,12 @@ function App() {
     // Add event listener for mouse down
     const canvas = canvasRef.current;
     canvas.addEventListener('mousedown', handleMouseDown);
+    canvas.addEventListener('mouseup', handleMouseUp);
 
     // Cleanup event listeners when component unmounts
     return () => {
       canvas.removeEventListener('mousedown', handleMouseDown);
+      canvas.removeEventListener('mouseup', handleMouseUp);
     };
   }, []); // Empty dependency array ensures this runs once when the component mounts
 
