@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
   var pendulumX = 0; // penulum x position
   var pendulumY = 0; // penulum y position
   const radius = 10; // radius of bob
+  const [circleColor, setColorCircle] = useState('red');
 
   // Initial conditions for the pendulum
   let angle = Math.PI / 2;  // Starting angle (90 degrees)
@@ -60,7 +61,7 @@ function App() {
     // Draw the bob (pendulum ball) as a red circle
     ctx.beginPath();
     ctx.arc(pendulumX, pendulumY, radius, 0, 2 * Math.PI);  // Draw circle at pendulum's current position
-    ctx.fillStyle = '#FF0000';  // Set the fill color to red
+    ctx.fillStyle = circleColor;  // Set the fill color
     ctx.fill();  // Fill the circle with the color
   };
 
